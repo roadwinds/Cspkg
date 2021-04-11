@@ -1,0 +1,9 @@
+{
+    "Type": "Extension",
+    "Name": "printhello",
+    "Info": "试验版",
+    "Author": "Roadwinds",
+    "Version": "1.0.0",
+    "Target": "build/printhello.cse",
+    "Dependencies": []
+}

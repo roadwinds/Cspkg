@@ -1,3 +1,0 @@
-"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\printhello.dir/objects.a
-E:\gcc-10.2.0-mingw-w64-8.0.0-r8-covscript.org\mingw64\bin\ar.exe cr CMakeFiles\printhello.dir/objects.a @CMakeFiles\printhello.dir\objects1.rsp
-E:\gcc-10.2.0-mingw-w64-8.0.0-r8-covscript.org\mingw64\bin\g++.exe --static -fPIC -s -O3 -shared -o printhello.cse -Wl,--out-implib,libprinthello.dll.a -Wl,--major-image-version,0,--minor-image-version,0 -Wl,--whole-archive CMakeFiles\printhello.dir/objects.a -Wl,--no-whole-archive @CMakeFiles\printhello.dir\linklibs.rsp

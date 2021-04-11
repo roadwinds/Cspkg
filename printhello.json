@@ -1,8 +1,0 @@
-{
-	"Author" : "Roadwinds",
-	"Dependencies" : [],
-	"Info" : "\u8bd5\u9a8c\u7248",
-	"Name" : "printhello",
-	"Target" : "https://github.com/covscript/package-example/releases/download/windows-schedule/printhello.cse",
-	"Version" : "1.0.0_ABI210404"
-}

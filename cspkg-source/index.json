@@ -1,0 +1,10 @@
+{
+    "base_url": "https://raw.githubusercontent.com/roadwinds/Cspkg/main/cspkg-source/",
+    "universal": "universal.json",
+    "windows": {
+        "x86_64": "windows_x86_64.json"
+    },
+    "linux": {
+        "x86_64": "linux_x86_64.json"
+    }
+}

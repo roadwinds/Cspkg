@@ -1,0 +1,102 @@
+name: Schedule Build
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  schedule:
+    - cron:  '0 */4 * * *'
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      # Setup CovScript SDK on Ubuntu
+      - name: Download CovScript SDK on Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        uses: i3h/download-release-asset@v1.2.0
+        with:
+          owner: covscript
+          repo: csbuild
+          tag: ubuntu-schedule
+          file: covscript-amd64.deb
+
+      # Build Extension on Ubuntu
+      - name: Build on Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo dpkg -i covscript-amd64.deb
+          mkdir build
+          cd build
+          cmake ..
+          make -j8
+          cspkg build https://github.com/roadwinds/Cspkg/releases/download/ubuntu-schedule/ .. --flat
+      
+      # Setup CovScript SDK on Windows
+      - name: Download MinGW-w64
+        if: matrix.os == 'windows-latest'
+        uses: i3h/download-release-asset@v1.2.0
+        with:
+          owner: covscript-archives
+          repo: mingw-w64
+          tag: gcc-10.2.0-mingw-w64-8.0.0-r8
+          file: gcc-10.2.0-mingw-w64-8.0.0-r8-covscript.org.zip
+          
+      - name: Download CovScript SDK on Windows
+        if: matrix.os == 'windows-latest'
+        uses: i3h/download-release-asset@v1.2.0
+        with:
+          owner: covscript
+          repo: csbuild
+          tag: windows-schedule
+          file: covscript-win32.7z
+
+      - name: Install Toolset in Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          rm C:/ProgramData/chocolatey/bin/gcc.exe -force
+          rm C:/ProgramData/chocolatey/bin/g++.exe -force
+          rm C:/Strawberry/c/bin/gcc.exe -force
+          rm C:/Strawberry/c/bin/g++.exe -force
+          7z x gcc-10.2.0-mingw-w64-8.0.0-r8-covscript.org.zip -oC:\
+          7z x covscript-win32.7z -oC:\
+
+      # Build Extension on Windows
+      - name: Build on Windows
+        if: matrix.os == 'windows-latest'
+        run: |
+          .github/workflows/build.bat
+          
+      - name: Automatic Release on Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        uses: marvinpinto/action-automatic-releases@master
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "ubuntu-schedule"
+          title: "Ubuntu Schedule Build"
+          prerelease: false
+          files: |
+            *.json
+            *.cse
+
+      - name: Automatic Release on Windows
+        if: matrix.os == 'windows-latest'
+        uses: marvinpinto/action-automatic-releases@master
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "windows-schedule"
+          title: "Windows Schedule Build"
+          prerelease: false
+          files: |
+            *.json
+            *.cse
